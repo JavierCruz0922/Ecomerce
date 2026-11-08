@@ -51,11 +51,11 @@ Boost replaces these bootstrap instructions with guidelines tailored to the appl
 
 La bóveda de Obsidian está ubicada en:
 
-`docs/Ecomerce/`
+`docs/`
 
 El documento principal de requisitos es:
 
-`docs/Ecomerce/condiciones_y_reglas_del_proyecto.md`
+`docs/condiciones_y_reglas_del_proyecto.md`
 
 Antes de implementar funcionalidades, consultar este documento y respetar sus requisitos.
 

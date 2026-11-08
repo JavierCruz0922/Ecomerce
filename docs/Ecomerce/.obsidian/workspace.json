@@ -1,20 +1,24 @@
 {
   "main": {
-    "id": "226871167acff3be",
+    "id": "9672e9d421d28505",
     "type": "split",
     "children": [
       {
-        "id": "28b33d6c62181c77",
+        "id": "1e5ec68a9e362bd6",
         "type": "tabs",
         "children": [
           {
-            "id": "56ebc4012d62baa2",
+            "id": "75564f2e924956f2",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "Bienvenido.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "Nueva pestaña"
+              "title": "Bienvenido"
             }
           }
         ]
@@ -23,15 +27,15 @@
     "direction": "vertical"
   },
   "left": {
-    "id": "841e7c34b233b084",
+    "id": "c77d188b34aa9295",
     "type": "split",
     "children": [
       {
-        "id": "e274495709a74b88",
+        "id": "3c08c0168cb3c49a",
         "type": "tabs",
         "children": [
           {
-            "id": "7d754ca61fe27edb",
+            "id": "430a9ba7009448f4",
             "type": "leaf",
             "state": {
               "type": "file-explorer",
@@ -46,7 +50,7 @@
             }
           },
           {
-            "id": "6c259498aaee12b4",
+            "id": "0e14616de43a5942",
             "type": "leaf",
             "state": {
               "type": "search",
@@ -63,7 +67,7 @@
             }
           },
           {
-            "id": "77498ad57947fcaf",
+            "id": "ebb70de66176b4d4",
             "type": "leaf",
             "state": {
               "type": "bookmarks",
@@ -82,15 +86,15 @@
     "width": 300
   },
   "right": {
-    "id": "21e0c9fddb804d37",
+    "id": "c1c6b0bfca468060",
     "type": "split",
     "children": [
       {
-        "id": "d3f5b5dbd58bc8fe",
+        "id": "0e9ec1c03e910160",
         "type": "tabs",
         "children": [
           {
-            "id": "a8cd7a0cf8f1d160",
+            "id": "7ea94a1775bf7e88",
             "type": "leaf",
             "state": {
               "type": "backlink",
@@ -109,7 +113,7 @@
             }
           },
           {
-            "id": "5ab23e94dca8db0b",
+            "id": "9744bd280ddc5cab",
             "type": "leaf",
             "state": {
               "type": "outgoing-link",
@@ -123,7 +127,7 @@
             }
           },
           {
-            "id": "d43d3ae93308ede9",
+            "id": "ffc46c46d7007a63",
             "type": "leaf",
             "state": {
               "type": "tag",
@@ -138,7 +142,7 @@
             }
           },
           {
-            "id": "d4baa796ee0c0aec",
+            "id": "8a86f92bc04bb2bd",
             "type": "leaf",
             "state": {
               "type": "all-properties",
@@ -152,7 +156,7 @@
             }
           },
           {
-            "id": "bb1ec915470e8817",
+            "id": "f3c56744808108c5",
             "type": "leaf",
             "state": {
               "type": "outline",
@@ -184,10 +188,6 @@
       "bases:Crear nueva base": false
     }
   },
-  "active": "7d754ca61fe27edb",
-  "lastOpenFiles": [
-    "condiciones_y_reglas_del_proyecto.md",
-    "file:C:/Users/serpe/OneDrive/Documentos/Proyectos/Ecomerce/Ecomerce/Sin título.canvas",
-    "Bienvenido.md"
-  ]
+  "active": "75564f2e924956f2",
+  "lastOpenFiles": []
 }
