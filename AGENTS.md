@@ -74,7 +74,7 @@ Antes de implementar funcionalidades, consultar este documento y respetar sus re
 2. Respetar las convenciones de Laravel.
 3. Implementar funcionalidades de manera modular.
 4. Incorporar validaciones y controles de seguridad.
-5. Crear pruebas para las funcionalidades desarrolladas.
+5. Crear o ampliar pruebas automatizadas para cada cambio funcional, incluidos los casos de regresión que correspondan. Documentar en cada PR y en su evidencia qué pruebas deben ejecutarse, sus comandos, los resultados esperados y los obtenidos. Para cambios exclusivamente documentales, registrar los controles aplicables y justificar por qué no se agregan pruebas automatizadas.
 6. No modificar los requisitos sin autorización.
 7. No ejecutar migraciones destructivas sin autorización.
 8. No modificar credenciales ni archivos de configuración sensibles sin autorización.
