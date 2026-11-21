@@ -32,6 +32,8 @@ git diff --cached --check
 
 Usa una terminal PowerShell separada desde la raíz del proyecto. El bloque configura variables solo para esa sesión, dirige vistas y cachés a una carpeta temporal y verifica con PDO que SQLite esté en memoria, sin archivo y con claves foráneas activas. La suite corre únicamente si pasa esa comprobación. Cierra esa terminal al terminar.
 
+Para acreditar una ejecución limpia, usa una copia temporal de los archivos versionados del SHA del PR e instala las dependencias con `composer install --no-interaction --prefer-dist --no-progress`. La copia debe empezar sin `.env`, `.env.testing`, base SQLite persistente ni cachés de la copia de trabajo. Comprueba que la terminal de prueba tampoco tenga una `APP_KEY` heredada. PHPUnit obtiene la clave pública de prueba desde `phpunit.xml`; su configuración la limita al proceso de PHPUnit.
+
 ```powershell
 $ErrorActionPreference = 'Stop'
 $proof = Join-Path ([IO.Path]::GetTempPath()) ('ecomerce-pr-tests-' + [guid]::NewGuid())

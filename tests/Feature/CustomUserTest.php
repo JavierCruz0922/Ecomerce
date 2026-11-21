@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
 class CustomUserTest extends TestCase
@@ -27,7 +28,7 @@ class CustomUserTest extends TestCase
 
         $user = User::query()->where('email', $email)->sole();
         $this->assertSame(['name' => $name, 'email' => $email], $user->only(['name', 'email']));
-        $this->assertFalse(hash_equals($password, $user->password), 'The password must be stored as a hash.');
+        $this->assertTrue(Hash::isHashed($user->password), 'The password must be stored as a hash.');
         $this->assertFalse(array_key_exists('password', $user->toArray()), 'The password must stay out of serialization.');
         $this->assertTrue(Auth::validate(['email' => $email, 'password' => $password]));
         $this->assertFalse(Auth::validate(['email' => $email, 'password' => $password.'-incorrect']));
