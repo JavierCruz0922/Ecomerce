@@ -19,8 +19,6 @@
     </source>
     <php>
         <env name="APP_ENV" value="testing"/>
-        <!-- Public AES-256 fixture for PHPUnit only. -->
-        <env name="APP_KEY" value="base64:ZWNvbWVyY2UtdGVzdGluZy1rZXktb25seS0wMDAwMDE=" force="true"/>
         <env name="APP_MAINTENANCE_DRIVER" value="file"/>
         <env name="BCRYPT_ROUNDS" value="4"/>
         <env name="BROADCAST_CONNECTION" value="null"/>
