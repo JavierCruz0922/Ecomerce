@@ -9,7 +9,6 @@ use App\Models\User;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use PDO;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
@@ -21,16 +20,7 @@ class CatalogSchemaTest extends TestCase
     {
         parent::setUp();
 
-        $connection = DB::connection();
-        $this->assertTrue(app()->environment('testing'));
-        $this->assertSame('sqlite', $connection->getDriverName());
-        $this->assertSame(':memory:', $connection->getDatabaseName());
-        $this->assertEmpty($connection->getConfig('url'));
-        $this->assertSame('sqlite', $connection->getPdo()->getAttribute(PDO::ATTR_DRIVER_NAME));
-        $this->assertSame('', $connection->selectOne('pragma database_list')->file);
-        $this->assertSame(1, (int) $connection->selectOne('pragma foreign_keys')->foreign_keys);
-
-        $this->artisan('migrate', ['--no-interaction' => true])->assertSuccessful();
+        $this->migrateIsolatedSqlite();
     }
 
     public function test_order_relations_and_snapshots_survive_catalog_changes_and_retirement(): void
