@@ -4,7 +4,7 @@
     </a>
 
     <article class="mt-4 grid gap-8 md:grid-cols-2 md:items-start">
-        <x-product-placeholder :category="$product->category->name" />
+        <x-product-image :product="$product" :detail="true" />
 
         <div>
             <p class="text-sm font-semibold text-muted-ink">{{ $product->category->name }} <span aria-hidden="true">·</span> {{ $product->sku }}</p>

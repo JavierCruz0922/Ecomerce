@@ -86,12 +86,17 @@ class StoreNavigationTest extends TestCase
             $this->assertSame($url, $title->getAttribute('href'));
             $this->assertSame("Ver detalle de {$product->name} ({$product->sku})", $link->getAttribute('aria-label'));
             $this->assertFalse($link->hasAttribute('tabindex'));
-            $this->assertStringContainsString('Imagen provisional', $link->textContent);
+            $image = $xpath->query('.//img', $link)->item(0);
+            $this->assertNotNull($image);
+            $this->assertSame(asset('images/catalogo/'.$product->image_path), $image->getAttribute('src'));
+            $this->assertSame("Imagen de {$product->name}", $image->getAttribute('alt'));
 
             $this->get($link->getAttribute('href'))
                 ->assertOk()
                 ->assertSee($product->name)
-                ->assertSee($product->sku);
+                ->assertSee($product->sku)
+                ->assertSeeHtml('src="'.asset('images/catalogo/'.$product->image_path).'"')
+                ->assertSeeHtml('href="'.route('images.credits').'#'.$product->sku.'"');
         }
 
         $this->assertSame($stockBefore, Product::query()->orderBy('sku')->pluck('stock', 'sku')->all());

@@ -46,7 +46,7 @@
                     <article class="flex h-full flex-col">
                         <a href="{{ $detailUrl }}" aria-label="Ver detalle de {{ $product->name }} ({{ $product->sku }})"
                             data-testid="product-visual-link" class="block rounded-xl hover:ring-2 hover:ring-pine">
-                            <x-product-placeholder :category="$product->category->name" />
+                            <x-product-image :product="$product" />
                         </a>
 
                         <div class="flex grow flex-col p-2 pt-4">

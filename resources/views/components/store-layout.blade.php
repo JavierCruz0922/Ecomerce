@@ -19,6 +19,13 @@
             {{ $slot }}
         </main>
 
+        <footer class="border-t border-paper-line">
+            <div class="mx-auto flex max-w-7xl flex-wrap items-center gap-x-6 px-5 py-3 sm:px-8 lg:px-12">
+                <span class="text-sm font-semibold">Papelería KICF</span>
+                <a href="{{ route('images.credits') }}" class="inline-flex min-h-11 items-center rounded text-sm font-semibold text-pine underline underline-offset-4">Créditos y licencias de imágenes</a>
+            </div>
+        </footer>
+
         @livewireScripts
     </body>
 </html>
