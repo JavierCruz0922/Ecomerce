@@ -8,6 +8,7 @@ Route::get('/', function () {
 })->name('home');
 
 Route::view('/catalogo', 'catalog.index')->name('catalog.index');
+Route::view('/creditos-imagenes', 'catalog.image-credits')->name('images.credits');
 
 Route::get('/catalogo/{product:sku}', function (Product $product) {
     return view('catalog.show', ['product' => $product->loadMissing('category')]);

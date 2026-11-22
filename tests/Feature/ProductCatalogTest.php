@@ -25,7 +25,7 @@ class ProductCatalogTest extends TestCase
     {
         $page = Livewire::test(ProductCatalog::class)
             ->assertSee('20 productos')
-            ->assertSee('Imagen provisional')
+            ->assertSeeHtml('src="'.asset('images/catalogo/PAP001.jpg').'"')
             ->assertSee('$ 1.500')
             ->assertSee('COP')
             ->assertSee('Disponible · 50 uds.');

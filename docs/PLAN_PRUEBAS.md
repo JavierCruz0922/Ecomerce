@@ -200,7 +200,13 @@ Para comprobar la interfaz, usa una copia temporal y una base SQLite nueva dentr
 
 Los cambios de búsqueda y filtro deben responder por Livewire sin recargar la página. Conserva capturas de Inicio y Catálogo y adjunta los resultados al PR con el SHA probado.
 
-La prueba de navegación sigue los enlaces visuales de los 20 SKU y comprueba el 404 para SKU inexistentes y retirados. El enlace se define en la tarjeta y envuelve el componente de imagen. Cuando se autoricen las imágenes reales, sustituye el contenido visual dentro del mismo enlace y repite los controles de clic, teclado y SKU. Mientras falten las imágenes autorizadas, R04 queda parcialmente cumplido.
+La prueba de navegación sigue los enlaces visuales de los 20 SKU y comprueba el 404 para SKU inexistentes y retirados. El enlace se define en la tarjeta y envuelve el componente de imagen.
+
+#### Imágenes originales y créditos de T05/P09
+
+Ejecuta el bloque PowerShell exacto de SQLite aislado y `php vendor/bin/phpunit --do-not-cache-result --filter 'CatalogImageCreditsTest|StoreNavigationTest|ProductCatalogTest'`. Los casos verifican el inventario de 20 archivos JPEG/PNG, el emparejamiento entre SKU y `image_path`, los textos alternativos, el respaldo cuando falta un archivo o la referencia difiere del inventario, y los créditos individuales. Usa la [documentación de fuentes](catalogo/FUENTES_IMAGENES.md) para contrastar títulos, autores y licencias.
+
+Sirve la aplicación con los recursos de Vite y SQLite temporal previamente comprobada, en modo de producción para reproducir el despliegue. En Edge revisa Inicio, Catálogo, detalle PAP001 y `/creditos-imagenes` con HTTP 200. Comprueba que las 20 URL estáticas carguen con HTTP 200 y su tipo JPEG o PNG. Verifica clic y teclado, el pie de página y los enlaces a la atribución de cada detalle. Repite a 1440, 768 y 390 px, incluidos PAP007, PAP016 y PAP019. Comprueba que se mantengan el stock y los filtros.
 
 ## 3. Matriz de casos de aceptación
 
