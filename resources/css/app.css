@@ -6,4 +6,114 @@
 @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
+    --color-paper: #f8f5ed;
+    --color-paper-shade: #ebe6d9;
+    --color-paper-line: #dcd6c8;
+    --color-control-line: #8a8071;
+    --color-ink: #21322d;
+    --color-muted-ink: #4e5d54;
+    --color-pine: #295044;
+    --color-pine-dark: #17382e;
+}
+
+@layer base {
+    :is(a, button, input, select):focus-visible {
+        outline: 2px solid #9a4b26;
+        outline-offset: 3px;
+    }
+}
+
+.home-paper-art {
+    position: relative;
+    isolation: isolate;
+    min-height: clamp(15rem, 48vw, 29rem);
+    overflow: hidden;
+    background: #e5c9a7;
+}
+
+.home-paper-art::before,
+.home-paper-art::after,
+.home-paper-art span {
+    position: absolute;
+    content: '';
+    box-shadow: 0 1.25rem 2rem #25322d26;
+}
+
+.home-paper-art::before {
+    inset: 12% 15% 14% 29%;
+    border-radius: 0.8rem;
+    transform: rotate(11deg);
+    background: #386452;
+}
+
+.home-paper-art::after {
+    inset: 20% 30% 11% 15%;
+    border: 0.9rem solid #fff9e9;
+    border-radius: 0.65rem;
+    transform: rotate(-12deg);
+    background: repeating-linear-gradient(#fff9e9 0 0.95rem, #d1c6b2 0.95rem 1rem);
+}
+
+.home-paper-art span {
+    z-index: 1;
+    right: 24%;
+    bottom: 20%;
+    width: 4%;
+    height: 49%;
+    border-radius: 1rem 1rem 40% 40%;
+    transform: rotate(36deg);
+    background: #a84c33;
+}
+
+.catalog-placeholder {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    align-items: end;
+    min-height: 8rem;
+    aspect-ratio: 16 / 9;
+    padding: 0.55rem;
+    overflow: hidden;
+    border-radius: 0.75rem;
+    background: var(--placeholder-bg);
+}
+
+.catalog-placeholder::before,
+.catalog-placeholder::after {
+    position: absolute;
+    inset: 17% 35% 13% 36%;
+    border-radius: 0.45rem;
+    content: '';
+}
+
+.catalog-placeholder::before {
+    transform: rotate(14deg) translateX(15%);
+    background: var(--placeholder-accent);
+    box-shadow: 0 0.75rem 1rem #27332b25;
+}
+
+.catalog-placeholder::after {
+    transform: rotate(-11deg) translateX(-15%);
+    border: 0.45rem solid #fff9ec;
+    background: repeating-linear-gradient(#fff9ec 0 0.5rem, #d8cebd 0.5rem 0.55rem);
+}
+
+.catalog-placeholder--writing {
+    --placeholder-bg: #efdaca;
+    --placeholder-accent: #a94f36;
+}
+
+.catalog-placeholder--paper {
+    --placeholder-bg: #e1e8d8;
+    --placeholder-accent: #5b7952;
+}
+
+.catalog-placeholder--filing {
+    --placeholder-bg: #eee2c5;
+    --placeholder-accent: #926333;
+}
+
+.catalog-placeholder--office {
+    --placeholder-bg: #dce5e4;
+    --placeholder-accent: #45726c;
 }
