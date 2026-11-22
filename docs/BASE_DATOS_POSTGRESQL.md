@@ -40,6 +40,17 @@ El seeder `KicfCatalogSeeder` lee el manifiesto versionado. El corte verificó 2
 
 La [fotografía SQL de la línea base](../database/sql/postgresql_schema.sql) se generó con PostgreSQL 18.6. Contiene DDL de las 13 tablas, secuencias, índices y restricciones. Se cotejó con una salida en memoria de `pg_dump --schema-only --no-owner --no-privileges`. Las sentencias coincidieron al omitir comentarios, espacios al margen y los marcadores aleatorios de `psql`. Su SHA-256 en el archivo local es `634d2b229f1ad2f9f3d68e691e87aef9d8a77ff3344852f31b5737c8c3ef6de3`.
 
+## Seguridad y acceso
+
+- **Credenciales.** La contraseña de `kicf_dev` solo vive en `.env`, que Git ignora. Los informes y los PR citan host, base y usuario, pero nunca la contraseña.
+- **Respaldos.** Se guardan fuera del repositorio y con acceso restringido. `.gitignore` excluye `*.dump` para evitar publicarlos por error en GitHub o GitLab.
+- **Comprobaciones de QA sobre la base de desarrollo.** Son de solo lectura. Cada sesión fuerza `default_transaction_read_only=on`, y una escritura de prueba se rechaza con el error 25006.
+- **Servir la aplicación para QA.** Usa sesión en archivo temporal y caché en memoria, porque el `.env` de desarrollo usa las tablas `sessions` y `cache`. Compara la huella del catálogo antes y después.
+- **Pruebas que escriben datos.** Usan SQLite en memoria o una instancia PostgreSQL exclusiva de pruebas, nunca `kicf_development`.
+- **Operaciones restringidas.** No se ejecutan `migrate:fresh`, `migrate:reset`, `db:wipe`, cambios de permisos, cambios en `pg_hba.conf` ni reinicios del servicio sin un plan aprobado.
+
+[Procedimiento de revalidación](VALIDACION_POSTGRESQL_18_KICF.md#qa-en-esta-ejecución).
+
 ## Respaldo y recuperación
 
 El respaldo completo de estructura y datos queda fuera del repositorio, en la carpeta `KICF-Backups` del perfil local. La evidencia de este corte corresponde a `kicf_development_20261122_123422.dump`, formato CUSTOM con gzip. `pg_restore --list` salió con código 0. La cabecera reportó 93 entradas de índice y el listado imprimió 89 filas numeradas. El usuario realizó la restauración en una base independiente y obtuvo 20 productos, cuatro categorías y 702 unidades. [Matriz de evidencias](VALIDACION_POSTGRESQL_18_KICF.md).

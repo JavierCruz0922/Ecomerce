@@ -1,6 +1,6 @@
 # Plan de pruebas
 
-Este plan reúne los controles de regresión y la matriz de aceptación del catálogo. Registra el resultado de cada ejecución en el PR correspondiente. El [PR del esquema](https://github.com/JavierCruz0922/Ecomerce/pull/1) contiene una muestra de evidencia técnica.
+Este plan reúne los controles de regresión y la matriz de aceptación del catálogo. Registra el resultado de cada ejecución en el PR correspondiente. Los [avances por PR](Ecomerce/03-Desarrollo/Avances-PR-KICF.md) enlazan las evidencias de los PR #1 a #7 y la regresión posterior a la sincronización de `main`.
 
 Antes de ejecutar pruebas, inspecciona phpunit.xml, la clase TestCase, los proveedores de la aplicación y las variables y caché de configuración que puedan modificar la conexión. Comprueba la conexión efectiva sin imprimir valores sensibles. Usa SQLite en memoria o temporal para pruebas locales y una base PostgreSQL exclusiva de pruebas para T15. No ejecutes migraciones destructivas. Dirige cachés, compilación y registros a ubicaciones aisladas cuando la comprobación sea de solo lectura.
 
@@ -121,7 +121,7 @@ if ($codigoUsuario -ne 0) { throw "CustomUserTest failed (exit=$codigoUsuario)" 
 
 ## Carga inicial del catálogo KICF
 
-T03/P07 usa [KicfCatalogSeeder](../database/seeders/KicfCatalogSeeder.php) y un [manifiesto de datos](../database/data/kicf-catalog.json) generado desde la hoja Productos. El Excel original y los archivos de imagen se conservan en la fuente local. Las rutas almacenan el nombre del archivo original, relativo a la carpeta de imágenes del catálogo.
+T03/P07 usa [KicfCatalogSeeder](../database/seeders/KicfCatalogSeeder.php) y un [manifiesto de datos](../database/data/kicf-catalog.json) generado desde la hoja Productos. El Excel se conserva en la fuente local. Desde el PR #6, las imágenes originales se versionan en `public/images/catalogo/` con [atribuciones y licencias](catalogo/FUENTES_IMAGENES.md). El manifiesto almacena el nombre de cada archivo relativo a esa carpeta.
 
 Desde la raíz, con acceso a la fuente local, comprueba que el manifiesto versionado sigue siendo reproducible:
 
@@ -140,7 +140,7 @@ php vendor/bin/phpunit --do-not-cache-result --filter KicfCatalogSeederTest
 
 La [prueba](../tests/Feature/KicfCatalogSeederTest.php) prepara el esquema y ejecuta `db:seed --class=KicfCatalogSeeder` en el mismo proceso. Espera 20 productos nuevos y cuatro categorías en la primera carga. En la segunda, espera cero inserciones y 20 existentes, incluidas las filas retiradas. Los precios, existencias y demás datos editados se conservan. Un lote con filas inválidas se rechaza completo y mantiene la base sin cambios.
 
-El manifiesto permite probar la carga en un clon sin el Excel ni las imágenes. La comprobación de que los archivos físicos coinciden con las referencias se realiza sobre la fuente local. La distribución de imágenes depende de sus permisos.
+El manifiesto permite probar la carga en un clon sin el Excel. La comparación del Excel con el manifiesto requiere acceso a la fuente local. La prueba de imágenes y créditos verifica que los archivos publicados corresponden a las referencias de los 20 SKU.
 
 ## Ejecutar estilo, Composer y build
 
