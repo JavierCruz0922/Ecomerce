@@ -208,6 +208,23 @@ Ejecuta el bloque PowerShell exacto de SQLite aislado y `php vendor/bin/phpunit 
 
 Sirve la aplicación con los recursos de Vite y SQLite temporal previamente comprobada, en modo de producción para reproducir el despliegue. En Edge revisa Inicio, Catálogo, detalle PAP001 y `/creditos-imagenes` con HTTP 200. Comprueba que las 20 URL estáticas carguen con HTTP 200 y su tipo JPEG o PNG. Verifica clic y teclado, el pie de página y los enlaces a la atribución de cada detalle. Repite a 1440, 768 y 390 px, incluidos PAP007, PAP016 y PAP019. Comprueba que se mantengan el stock y los filtros.
 
+### T06/P10 · Búsqueda avanzada y filtros
+
+Consulta la [bitácora de implementación de T06/P10](catalogo/T06-P10.md) para el alcance, resultados y seguimiento.
+
+Ejecuta primero el bloque PowerShell exacto de [SQLite aislado](#ejecutar-phpunit-en-sqlite-aislado) y después `php vendor/bin/phpunit --do-not-cache-result --filter ProductCatalogTest`. Ambas ejecuciones deben salir con código 0. Los escenarios de T06 se agregan a la regresión de 53 pruebas y 1.184 aserciones.
+
+| Caso | Resultado esperado |
+| --- | --- |
+| Buscar `Cuaderno` en modo parcial, luego en modo exacto | Dos resultados en parcial y ninguno en exacto |
+| Buscar `Cuaderno rayado` o `pap007` en modo exacto | Un resultado, PAP007 |
+| Elegir Color Rojo, Material Papel y cartón, Categoría Papel y precio de 8.000 a 8.000 COP | Solo PAP007 |
+| Buscar `%`, `_` o una barra invertida en modo parcial con datos sintéticos | Solo coincidencias que contienen el carácter literal |
+| Enviar un modo, color o material inválido | Error de validación. Persisten los resultados del último filtro válido. |
+| Limpiar filtros | Los 20 SKU vuelven a mostrarse y el modo se restablece a Parcial. Precios y existencias se conservan. |
+
+En Edge, repite el flujo a 1440, 768 y 390 px. Comprueba el contraste y el foco de los controles, aplica la búsqueda con Enter, abre el detalle y regresa. Las actualizaciones de Livewire deben responder HTTP 200 y conservar la carga de página. Los buscadores usan `LOWER` de cada motor. SQLite estándar pliega mayúsculas ASCII y PostgreSQL depende de su configuración regional. Las búsquedas conservan los acentos.
+
 ## 3. Matriz de casos de aceptación
 
 | ID | Función | Caso de prueba | Resultado esperado |

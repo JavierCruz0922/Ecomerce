@@ -1,14 +1,26 @@
 <div>
     <form wire:submit="applyFilters" aria-label="Filtrar productos" class="rounded-2xl border border-paper-line bg-white p-4 sm:p-6">
         @php($fieldClass = 'min-h-11 w-full min-w-0 rounded-lg border border-control-line bg-paper px-3 text-sm text-ink placeholder:text-muted-ink')
-        <div class="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-[1.4fr_1fr_0.85fr_0.85fr]">
-            <div class="col-span-2 sm:col-span-1">
+        <div class="grid gap-3 sm:grid-cols-[2fr_1fr] sm:gap-4">
+            <div class="min-w-0">
                 <label for="catalog-search" class="mb-1.5 block text-sm font-semibold">Nombre o SKU</label>
                 <input id="catalog-search" type="search" wire:model="search" maxlength="100" placeholder="Ej. Cuaderno o PAP006"
                     class="{{ $fieldClass }}" @error('search') aria-invalid="true" aria-describedby="search-error" @enderror>
                 @error('search') <p id="search-error" role="alert" class="mt-1 text-sm text-red-800">{{ $message }}</p> @enderror
             </div>
-            <div class="col-span-2 sm:col-span-1">
+            <div class="min-w-0">
+                <label for="catalog-search-mode" class="mb-1.5 block text-sm font-semibold">Coincidencia</label>
+                <select id="catalog-search-mode" wire:model="searchMode" class="{{ $fieldClass }}" aria-describedby="catalog-search-mode-help @error('searchMode') search-mode-error @enderror" @error('searchMode') aria-invalid="true" @enderror>
+                    <option value="partial">Parcial · contiene el texto</option>
+                    <option value="exact">Exacta · nombre o SKU completo</option>
+                </select>
+                @error('searchMode') <p id="search-mode-error" role="alert" class="mt-1 text-sm text-red-800">{{ $message }}</p> @enderror
+            </div>
+        </div>
+        <p id="catalog-search-mode-help" class="mt-2 text-xs text-muted-ink">La búsqueda parcial encuentra fragmentos. La exacta requiere el nombre o SKU completo.</p>
+
+        <div class="mt-4 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-5">
+            <div class="col-span-2 min-w-0 sm:col-span-1">
                 <label for="catalog-category" class="mb-1.5 block text-sm font-semibold">Categoría</label>
                 <select id="catalog-category" wire:model="category" class="{{ $fieldClass }}" @error('category') aria-invalid="true" aria-describedby="category-error" @enderror>
                     <option value="">Todas las categorías</option>
@@ -18,6 +30,18 @@
                 </select>
                 @error('category') <p id="category-error" role="alert" class="mt-1 text-sm text-red-800">{{ $message }}</p> @enderror
             </div>
+            @foreach (['color' => ['Color', 'Todos los colores', $colors], 'material' => ['Material', 'Todos los materiales', $materials]] as $field => [$label, $placeholder, $options])
+                <div class="min-w-0">
+                    <label for="catalog-{{ $field }}" class="mb-1.5 block text-sm font-semibold">{{ $label }}</label>
+                    <select id="catalog-{{ $field }}" wire:model="{{ $field }}" class="{{ $fieldClass }}" @error($field) aria-invalid="true" aria-describedby="{{ $field }}-error" @enderror>
+                        <option value="">{{ $placeholder }}</option>
+                        @foreach ($options as $option)
+                            <option value="{{ $option }}">{{ $option }}</option>
+                        @endforeach
+                    </select>
+                    @error($field) <p id="{{ $field }}-error" role="alert" class="mt-1 text-sm text-red-800">{{ $message }}</p> @enderror
+                </div>
+            @endforeach
             @foreach (['minPrice' => 'Precio mínimo (COP)', 'maxPrice' => 'Precio máximo (COP)'] as $field => $label)
                 <div>
                     <label for="{{ $field }}" class="mb-1.5 block text-sm font-semibold">{{ $label }}</label>

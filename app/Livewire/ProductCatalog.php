@@ -17,7 +17,13 @@ class ProductCatalog extends Component
 
     public $search = '';
 
+    public $searchMode = 'partial';
+
     public $category = '';
+
+    public $color = '';
+
+    public $material = '';
 
     public $minPrice = '';
 
@@ -30,15 +36,21 @@ class ProductCatalog extends Component
     {
         $validated = $this->validate([
             'search' => ['nullable', 'string', 'max:100'],
+            'searchMode' => ['required', 'string', Rule::in(['partial', 'exact'])],
             'category' => ['bail', 'nullable', 'integer', 'min:1', Rule::exists(Category::class, 'id')],
+            'color' => ['bail', 'nullable', 'string', 'max:255', Rule::exists(Product::class, 'color')->withoutTrashed()],
+            'material' => ['bail', 'nullable', 'string', 'max:255', Rule::exists(Product::class, 'material')->withoutTrashed()],
             'minPrice' => ['bail', 'nullable', 'integer', 'min:0', 'max:2147483647'],
             'maxPrice' => ['bail', 'nullable', 'integer', 'min:0', 'max:2147483647', Rule::when(filled($this->minPrice), 'gte:minPrice')],
         ], [
             'search.string' => 'Escribe un nombre o SKU válido.',
             'search.max' => 'Usa hasta 100 caracteres.',
+            'searchMode.*' => 'Selecciona una búsqueda parcial o exacta.',
             'category.integer' => 'Selecciona una categoría de la lista.',
             'category.min' => 'Selecciona una categoría de la lista.',
             'category.exists' => 'Selecciona una categoría de la lista.',
+            'color.*' => 'Selecciona un color de la lista.',
+            'material.*' => 'Selecciona un material de la lista.',
             'minPrice.integer' => 'Introduce un valor entero en COP.',
             'maxPrice.integer' => 'Introduce un valor entero en COP.',
             'minPrice.min' => 'El precio mínimo debe ser mayor o igual a cero.',
@@ -48,9 +60,13 @@ class ProductCatalog extends Component
             'maxPrice.gte' => 'El precio máximo debe ser mayor o igual al mínimo.',
         ]);
 
+        $search = trim($validated['search'] ?? '');
         $this->filters = array_filter([
-            'search' => trim($validated['search'] ?? ''),
+            'search' => $search,
+            'search_mode' => $search === '' ? null : $validated['searchMode'],
             'category_id' => $validated['category'] ?? null,
+            'color' => $validated['color'] ?? null,
+            'material' => $validated['material'] ?? null,
             'min_price' => $validated['minPrice'] ?? null,
             'max_price' => $validated['maxPrice'] ?? null,
         ], static fn ($value): bool => filled($value));
@@ -60,7 +76,7 @@ class ProductCatalog extends Component
 
     public function clearFilters(): void
     {
-        $this->reset('search', 'category', 'minPrice', 'maxPrice', 'filters');
+        $this->reset('search', 'searchMode', 'category', 'color', 'material', 'minPrice', 'maxPrice', 'filters');
         $this->resetValidation();
         $this->resetPage();
     }
@@ -70,14 +86,27 @@ class ProductCatalog extends Component
         $products = Product::query()->with('category:id,name')->orderBy('sku');
 
         if (isset($this->filters['search'])) {
-            $pattern = '%'.$this->filters['search'].'%';
-
-            $products->where(fn (Builder $query) => $query
-                ->whereLike('name', $pattern)
-                ->orWhereLike('sku', $pattern));
+            $search = $this->filters['search'];
+            if ($this->filters['search_mode'] === 'exact') {
+                $products->where(fn (Builder $query) => $query
+                    ->whereRaw('LOWER(name) = LOWER(?)', [$search])
+                    ->orWhereRaw('LOWER(sku) = LOWER(?)', [$search]));
+            } else {
+                // Using ! as the escape character leaves backslashes literal on both engines.
+                $pattern = '%'.strtr($search, ['!' => '!!', '%' => '!%', '_' => '!_']).'%';
+                $products->where(fn (Builder $query) => $query
+                    ->whereRaw("LOWER(name) LIKE LOWER(?) ESCAPE '!'", [$pattern])
+                    ->orWhereRaw("LOWER(sku) LIKE LOWER(?) ESCAPE '!'", [$pattern]));
+            }
         }
 
-        foreach (['category_id' => ['category_id', '='], 'min_price' => ['price_cop', '>='], 'max_price' => ['price_cop', '<=']] as $filter => [$column, $operator]) {
+        foreach ([
+            'category_id' => ['category_id', '='],
+            'color' => ['color', '='],
+            'material' => ['material', '='],
+            'min_price' => ['price_cop', '>='],
+            'max_price' => ['price_cop', '<='],
+        ] as $filter => [$column, $operator]) {
             if (isset($this->filters[$filter])) {
                 $products->where($column, $operator, $this->filters[$filter]);
             }
@@ -86,6 +115,8 @@ class ProductCatalog extends Component
         return view('livewire.product-catalog', [
             'products' => $products->paginate(20),
             'categories' => Category::query()->orderBy('name')->get(['id', 'name']),
+            'colors' => Product::query()->where('color', '<>', '')->distinct()->orderBy('color')->pluck('color'),
+            'materials' => Product::query()->where('material', '<>', '')->distinct()->orderBy('material')->pluck('material'),
         ]);
     }
 }
