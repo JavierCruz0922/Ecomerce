@@ -1,0 +1,222 @@
+[
+  {
+    "sku": "PAP001",
+    "name": "Bolígrafo azul",
+    "category": "Escritura",
+    "color": "Azul",
+    "material": "Plástico",
+    "description": "Bolígrafo de tinta azul, punta de 1 mm y tapa con clip. Presentación individual.",
+    "price_cop": 1500,
+    "stock": 50,
+    "image_path": "PAP001.jpg"
+  },
+  {
+    "sku": "PAP002",
+    "name": "Lápiz de grafito HB",
+    "category": "Escritura",
+    "color": "Amarillo",
+    "material": "Madera",
+    "description": "Lápiz de grafito HB con cuerpo hexagonal y borrador. Presentación individual.",
+    "price_cop": 1200,
+    "stock": 60,
+    "image_path": "PAP002.png"
+  },
+  {
+    "sku": "PAP003",
+    "name": "Portaminas de 0,5 mm",
+    "category": "Escritura",
+    "color": "Negro",
+    "material": "Plástico",
+    "description": "Portaminas recargable de 0,5 mm con clip y borrador. Presentación individual.",
+    "price_cop": 4500,
+    "stock": 25,
+    "image_path": "PAP003.jpg"
+  },
+  {
+    "sku": "PAP004",
+    "name": "Marcador permanente negro",
+    "category": "Escritura",
+    "color": "Negro",
+    "material": "Plástico",
+    "description": "Marcador de tinta permanente negra con punta redonda. Presentación individual.",
+    "price_cop": 3500,
+    "stock": 30,
+    "image_path": "PAP004.png"
+  },
+  {
+    "sku": "PAP005",
+    "name": "Resaltador amarillo",
+    "category": "Escritura",
+    "color": "Amarillo",
+    "material": "Plástico",
+    "description": "Resaltador de tinta amarilla con punta biselada y tapa. Presentación individual.",
+    "price_cop": 3000,
+    "stock": 35,
+    "image_path": "PAP005.png"
+  },
+  {
+    "sku": "PAP006",
+    "name": "Cuaderno cuadriculado",
+    "category": "Papel",
+    "color": "Azul",
+    "material": "Papel y cartón",
+    "description": "Cuaderno de 100 hojas cuadriculadas, tapa azul y tamaño de 21 x 28 cm.",
+    "price_cop": 8000,
+    "stock": 30,
+    "image_path": "PAP006.png"
+  },
+  {
+    "sku": "PAP007",
+    "name": "Cuaderno rayado",
+    "category": "Papel",
+    "color": "Rojo",
+    "material": "Papel y cartón",
+    "description": "Cuaderno de 100 hojas rayadas, tapa roja y tamaño de 21 x 28 cm.",
+    "price_cop": 8000,
+    "stock": 30,
+    "image_path": "PAP007.jpg"
+  },
+  {
+    "sku": "PAP008",
+    "name": "Bloc de notas blanco",
+    "category": "Papel",
+    "color": "Blanco",
+    "material": "Papel",
+    "description": "Bloc de 80 hojas blancas desprendibles, tamaño de 10 x 15 cm.",
+    "price_cop": 3500,
+    "stock": 40,
+    "image_path": "PAP008.png"
+  },
+  {
+    "sku": "PAP009",
+    "name": "Resma de papel carta",
+    "category": "Papel",
+    "color": "Blanco",
+    "material": "Papel",
+    "description": "Resma de 500 hojas blancas de 75 g/m², tamaño carta de 21,6 x 27,9 cm.",
+    "price_cop": 22000,
+    "stock": 20,
+    "image_path": "PAP009.png"
+  },
+  {
+    "sku": "PAP010",
+    "name": "Notas adhesivas amarillas",
+    "category": "Papel",
+    "color": "Amarillo",
+    "material": "Papel",
+    "description": "Bloque de 100 notas adhesivas amarillas de 7,6 x 7,6 cm.",
+    "price_cop": 4000,
+    "stock": 40,
+    "image_path": "PAP010.png"
+  },
+  {
+    "sku": "PAP011",
+    "name": "Carpeta de cartón carta",
+    "category": "Archivo",
+    "color": "Marrón",
+    "material": "Cartón",
+    "description": "Carpeta de cartón con solapa para documentos tamaño carta. Presentación individual.",
+    "price_cop": 2000,
+    "stock": 50,
+    "image_path": "PAP011.png"
+  },
+  {
+    "sku": "PAP012",
+    "name": "Carpeta plástica con broche",
+    "category": "Archivo",
+    "color": "Azul",
+    "material": "Plástico",
+    "description": "Carpeta plástica azul con cierre de broche para documentos tamaño carta.",
+    "price_cop": 5000,
+    "stock": 30,
+    "image_path": "PAP012.png"
+  },
+  {
+    "sku": "PAP013",
+    "name": "Archivador de palanca",
+    "category": "Archivo",
+    "color": "Negro",
+    "material": "Cartón y metal",
+    "description": "Archivador tamaño carta con mecanismo de palanca, lomo de 8 cm y portaetiqueta.",
+    "price_cop": 16000,
+    "stock": 15,
+    "image_path": "PAP013.jpg"
+  },
+  {
+    "sku": "PAP014",
+    "name": "Sobre manila carta",
+    "category": "Archivo",
+    "color": "Marrón",
+    "material": "Papel",
+    "description": "Sobre manila de 23 x 30 cm para documentos tamaño carta. Presentación individual.",
+    "price_cop": 800,
+    "stock": 100,
+    "image_path": "PAP014.png"
+  },
+  {
+    "sku": "PAP015",
+    "name": "Separadores de colores",
+    "category": "Archivo",
+    "color": "Multicolor",
+    "material": "Cartulina",
+    "description": "Juego de 5 separadores tamaño carta, con pestañas y perforaciones.",
+    "price_cop": 4500,
+    "stock": 25,
+    "image_path": "PAP015.jpg"
+  },
+  {
+    "sku": "PAP016",
+    "name": "Grapadora de escritorio",
+    "category": "Accesorios de oficina",
+    "color": "Negro",
+    "material": "Metal y plástico",
+    "description": "Grapadora para grapas 26/6, con capacidad de hasta 20 hojas. No incluye grapas.",
+    "price_cop": 14000,
+    "stock": 15,
+    "image_path": "PAP016.jpg"
+  },
+  {
+    "sku": "PAP017",
+    "name": "Perforadora de dos huecos",
+    "category": "Accesorios de oficina",
+    "color": "Negro",
+    "material": "Metal y plástico",
+    "description": "Perforadora de dos huecos con guía y depósito, para hasta 10 hojas.",
+    "price_cop": 18000,
+    "stock": 12,
+    "image_path": "PAP017.jpg"
+  },
+  {
+    "sku": "PAP018",
+    "name": "Tijeras de oficina",
+    "category": "Accesorios de oficina",
+    "color": "Azul",
+    "material": "Acero y plástico",
+    "description": "Tijeras de 17 cm con hojas de acero y mangos plásticos azules.",
+    "price_cop": 6000,
+    "stock": 20,
+    "image_path": "PAP018.png"
+  },
+  {
+    "sku": "PAP019",
+    "name": "Regla transparente de 30 cm",
+    "category": "Accesorios de oficina",
+    "color": "Transparente",
+    "material": "Plástico",
+    "description": "Regla de 30 cm con graduación en centímetros y milímetros.",
+    "price_cop": 2500,
+    "stock": 40,
+    "image_path": "PAP019.png"
+  },
+  {
+    "sku": "PAP020",
+    "name": "Cinta adhesiva transparente",
+    "category": "Accesorios de oficina",
+    "color": "Transparente",
+    "material": "Plástico",
+    "description": "Rollo de cinta adhesiva transparente de 18 mm de ancho y 30 m de largo.",
+    "price_cop": 3000,
+    "stock": 35,
+    "image_path": "PAP020.jpg"
+  }
+]
