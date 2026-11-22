@@ -70,6 +70,86 @@ class ProductCatalogTest extends TestCase
             ->assertSet('minPrice', '')->assertSet('maxPrice', '');
     }
 
+    public function test_exact_search_requires_the_full_name_or_sku(): void
+    {
+        Livewire::test(ProductCatalog::class)
+            ->set('search', 'cuaderno')->call('applyFilters')->assertSee('2 productos')
+            ->set('searchMode', 'exact')->call('applyFilters')
+            ->assertSee('0 productos')->assertSee('No hay productos que coincidan')
+            ->set('search', ' CUADERNO RAYADO ')->call('applyFilters')
+            ->assertSee('1 producto')->assertSee('Cuaderno rayado')->assertDontSee('Cuaderno cuadriculado')
+            ->set('search', 'pap00')->call('applyFilters')->assertSee('0 productos')
+            ->set('search', 'pap007')->call('applyFilters')
+            ->assertSee('1 producto')->assertSee('Cuaderno rayado');
+    }
+
+    public function test_partial_search_treats_percent_underscore_backslash_and_escape_as_literal(): void
+    {
+        $source = Product::query()->where('sku', 'PAP001')->sole();
+        foreach ([
+            'QA_100' => 'Etiqueta 50% de papel',
+            'QAX100' => 'Etiqueta 500 de papel',
+            'QA103' => 'Ficha A_B',
+            'QA104' => 'Ficha A1B',
+            'QA105' => 'Separador A\\B',
+            'QA106' => 'Separador AB',
+            'QA107' => 'Sello ¡Sí!',
+        ] as $sku => $name) {
+            $source->replicate()->fill(['sku' => $sku, 'name' => $name])->save();
+        }
+
+        $page = Livewire::test(ProductCatalog::class);
+        foreach ([
+            '50%' => 'Etiqueta 50% de papel',
+            'A_B' => 'Ficha A_B',
+            '\\' => 'Separador A\\B',
+            '!' => 'Sello ¡Sí!',
+            'qa_1' => 'Etiqueta 50% de papel',
+        ] as $search => $name) {
+            $page->set('search', $search)->call('applyFilters')
+                ->assertSee('1 producto')->assertSee($name);
+        }
+    }
+
+    public function test_it_combines_real_color_and_material_with_category_price_and_search(): void
+    {
+        $paper = Category::query()->where('name', 'Papel')->sole();
+        $before = Product::query()->orderBy('sku')->get(['sku', 'price_cop', 'stock'])->toArray();
+
+        Livewire::test(ProductCatalog::class)
+            ->assertSeeHtml('value="Azul"')->assertSeeHtml('value="Papel y cartón"')
+            ->set('color', 'Azul')->call('applyFilters')->assertSee('4 productos')
+            ->call('clearFilters')
+            ->set('material', 'Papel y cartón')->call('applyFilters')->assertSee('2 productos')
+            ->set('color', 'Rojo')->set('category', $paper->id)
+            ->set('minPrice', '8000')->set('maxPrice', '8000')
+            ->set('searchMode', 'exact')->set('search', 'PAP007')->call('applyFilters')
+            ->assertSee('1 producto')->assertSee('Cuaderno rayado')->assertDontSee('Cuaderno cuadriculado')
+            ->set('maxPrice', '9000')->set('minPrice', '8001')->call('applyFilters')
+            ->assertSee('0 productos')->assertSee('No hay productos que coincidan')
+            ->call('clearFilters')->assertSee('20 productos')->assertSet('searchMode', 'partial')
+            ->assertSet('search', '')->assertSet('category', '')->assertSet('color', '')
+            ->assertSet('material', '')->assertSet('minPrice', '')->assertSet('maxPrice', '')
+            ->assertSet('filters', []);
+
+        $this->assertSame($before, Product::query()->orderBy('sku')->get(['sku', 'price_cop', 'stock'])->toArray());
+    }
+
+    public function test_it_rejects_unknown_modes_and_options_from_retired_products(): void
+    {
+        Product::query()->where('sku', 'PAP015')->sole()->delete();
+
+        Livewire::test(ProductCatalog::class)
+            ->assertDontSeeHtml('value="Multicolor"')->assertDontSeeHtml('value="Cartulina"')
+            ->set('searchMode', 'unknown')->set('color', 'Multicolor')
+            ->set('material', 'Cartulina')->call('applyFilters')
+            ->assertHasErrors(['searchMode' => 'in', 'color' => 'exists', 'material' => 'exists'])
+            ->assertSee('19 productos')
+            ->set('searchMode', 'partial')->set('color', ['Azul'])->set('material', 'Material inventado')
+            ->call('applyFilters')->assertHasErrors(['color' => 'string', 'material' => 'exists'])
+            ->call('clearFilters')->assertHasNoErrors();
+    }
+
     public function test_it_rejects_invalid_input_and_keeps_the_last_valid_results(): void
     {
         Livewire::test(ProductCatalog::class)

@@ -1,14 +1,38 @@
 <div>
-    <form wire:submit="applyFilters" aria-label="Filtrar productos" class="rounded-2xl border border-paper-line bg-white p-4 sm:p-6">
+    <form wire:submit="applyFilters" x-data="{ filtersOpen: false }" novalidate aria-label="Filtrar productos"
+        class="rounded-2xl border border-paper-line bg-white p-3 sm:p-6">
         @php($fieldClass = 'min-h-11 w-full min-w-0 rounded-lg border border-control-line bg-paper px-3 text-sm text-ink placeholder:text-muted-ink')
-        <div class="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-[1.4fr_1fr_0.85fr_0.85fr]">
-            <div class="col-span-2 sm:col-span-1">
+        <div class="grid gap-2 min-[360px]:grid-cols-[minmax(0,1fr)_7rem] sm:grid-cols-[2fr_1fr] sm:gap-4">
+            <div class="min-w-0">
                 <label for="catalog-search" class="mb-1.5 block text-sm font-semibold">Nombre o SKU</label>
-                <input id="catalog-search" type="search" wire:model="search" maxlength="100" placeholder="Ej. Cuaderno o PAP006"
+                <input id="catalog-search" type="search" wire:model="search" maxlength="100" placeholder="Cuaderno o PAP006"
                     class="{{ $fieldClass }}" @error('search') aria-invalid="true" aria-describedby="search-error" @enderror>
                 @error('search') <p id="search-error" role="alert" class="mt-1 text-sm text-red-800">{{ $message }}</p> @enderror
             </div>
-            <div class="col-span-2 sm:col-span-1">
+            <div class="min-w-0">
+                <label for="catalog-search-mode" class="mb-1.5 block text-sm font-semibold">Coincidencia</label>
+                <select id="catalog-search-mode" wire:model="searchMode" class="{{ $fieldClass }}" aria-describedby="catalog-search-mode-help @error('searchMode') search-mode-error @enderror" @error('searchMode') aria-invalid="true" @enderror>
+                    <option value="partial">Parcial</option>
+                    <option value="exact">Exacta</option>
+                </select>
+                @error('searchMode') <p id="search-mode-error" role="alert" class="mt-1 text-sm text-red-800">{{ $message }}</p> @enderror
+            </div>
+        </div>
+        <p id="catalog-search-mode-help" class="mt-2 text-xs text-muted-ink">Parcial busca fragmentos. Exacta usa el texto completo.</p>
+
+        <button type="button" aria-controls="catalog-advanced-filters" aria-expanded="false"
+            x-bind:aria-expanded="filtersOpen" x-on:click="filtersOpen = ! filtersOpen"
+            class="mt-2 inline-flex min-h-11 items-center gap-2 rounded-lg text-sm font-semibold text-pine sm:hidden">
+            Filtros avanzados
+            <span aria-hidden="true" x-text="filtersOpen ? '−' : '+'">+</span>
+        </button>
+        @if ($errors->hasAny(['category', 'color', 'material', 'minPrice', 'maxPrice']))
+            <p role="alert" class="mt-1 text-sm text-red-800 sm:hidden">Revisa los campos de filtros avanzados.</p>
+        @endif
+
+        <div id="catalog-advanced-filters" data-expanded="false" x-bind:data-expanded="filtersOpen ? 'true' : 'false'"
+            class="mt-4 grid gap-3 max-sm:data-[expanded=false]:hidden min-[360px]:grid-cols-2 sm:gap-4 lg:grid-cols-5">
+            <div class="min-w-0 min-[360px]:max-sm:col-span-2">
                 <label for="catalog-category" class="mb-1.5 block text-sm font-semibold">Categoría</label>
                 <select id="catalog-category" wire:model="category" class="{{ $fieldClass }}" @error('category') aria-invalid="true" aria-describedby="category-error" @enderror>
                     <option value="">Todas las categorías</option>
@@ -18,7 +42,19 @@
                 </select>
                 @error('category') <p id="category-error" role="alert" class="mt-1 text-sm text-red-800">{{ $message }}</p> @enderror
             </div>
-            @foreach (['minPrice' => 'Precio mínimo (COP)', 'maxPrice' => 'Precio máximo (COP)'] as $field => $label)
+            @foreach (['color' => $colors, 'material' => $materials] as $field => $options)
+                <div class="min-w-0">
+                    <label for="catalog-{{ $field }}" class="mb-1.5 block text-sm font-semibold">{{ ucfirst($field) }}</label>
+                    <select id="catalog-{{ $field }}" wire:model="{{ $field }}" class="{{ $fieldClass }}" @error($field) aria-invalid="true" aria-describedby="{{ $field }}-error" @enderror>
+                        <option value="">Cualquiera</option>
+                        @foreach ($options as $option)
+                            <option value="{{ $option }}">{{ $option }}</option>
+                        @endforeach
+                    </select>
+                    @error($field) <p id="{{ $field }}-error" role="alert" class="mt-1 text-sm text-red-800">{{ $message }}</p> @enderror
+                </div>
+            @endforeach
+            @foreach (['minPrice' => 'Desde (COP)', 'maxPrice' => 'Hasta (COP)'] as $field => $label)
                 <div>
                     <label for="{{ $field }}" class="mb-1.5 block text-sm font-semibold">{{ $label }}</label>
                     <input id="{{ $field }}" type="number" inputmode="numeric" min="0" max="2147483647" step="1"
@@ -28,13 +64,13 @@
             @endforeach
         </div>
 
-        <div class="mt-4 flex flex-wrap gap-2">
+        <div class="mt-2 flex flex-wrap gap-2 sm:mt-4">
             <button type="submit" class="min-h-11 rounded-lg bg-pine px-5 text-sm font-semibold text-white hover:bg-pine-dark">Aplicar filtros</button>
             <button type="button" wire:click="clearFilters" class="min-h-11 rounded-lg px-4 text-sm font-semibold text-pine hover:bg-paper-shade">Limpiar filtros</button>
         </div>
     </form>
 
-    <p role="status" aria-live="polite" class="my-5 text-sm font-semibold text-muted-ink" data-testid="catalog-result">
+    <p role="status" aria-live="polite" class="my-3 text-sm font-semibold text-muted-ink sm:my-5" data-testid="catalog-result">
         {{ $products->total() }} {{ $products->total() === 1 ? 'producto' : 'productos' }}
     </p>
 
