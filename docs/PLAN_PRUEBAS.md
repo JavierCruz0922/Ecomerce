@@ -195,9 +195,12 @@ Para comprobar la interfaz, usa una copia temporal y una base SQLite nueva dentr
 | Buscar `Cuaderno`, buscar `PAP020` y usar un texto inexistente | Dos, un producto agotado y un estado vacío, respectivamente |
 | Aplicar categoría Papel y rango de 3.500 a 8.000 COP | Cuatro productos. Añadir `Cuaderno` devuelve dos. Limpiar devuelve 20 |
 | Abrir `/catalogo/PAP006` y volver | Detalle con categoría, precio y existencias. El menú conserva el contexto de Catálogo |
+| Hacer clic en la imagen provisional de PAP001 y repetir con Tab y Enter | Ambos accesos abren `/catalogo/PAP001` y muestran Bolígrafo azul. El título conserva su enlace. Volver y filtrar no cambia el stock. |
 | Repetir en escritorio, tableta y móvil de 390 px | Controles accesibles, sin desbordamiento horizontal, sin errores HTTP 5xx o JavaScript |
 
 Los cambios de búsqueda y filtro deben responder por Livewire sin recargar la página. Conserva capturas de Inicio y Catálogo y adjunta los resultados al PR con el SHA probado.
+
+La prueba de navegación sigue los enlaces visuales de los 20 SKU y comprueba el 404 para SKU inexistentes y retirados. El enlace se define en la tarjeta y envuelve el componente de imagen. Cuando se autoricen las imágenes reales, sustituye el contenido visual dentro del mismo enlace y repite los controles de clic, teclado y SKU. Mientras falten las imágenes autorizadas, R04 queda parcialmente cumplido.
 
 ## 3. Matriz de casos de aceptación
 

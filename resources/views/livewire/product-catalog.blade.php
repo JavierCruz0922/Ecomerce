@@ -42,13 +42,17 @@
         <ul class="grid grid-cols-1 gap-4 min-[540px]:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" aria-label="Productos">
             @foreach ($products as $product)
                 <li wire:key="product-{{ $product->id }}" data-testid="catalog-product" class="min-w-0 rounded-2xl border border-paper-line bg-white p-3">
+                    @php($detailUrl = route('catalog.show', $product->sku))
                     <article class="flex h-full flex-col">
-                        <x-product-placeholder :category="$product->category->name" />
+                        <a href="{{ $detailUrl }}" aria-label="Ver detalle de {{ $product->name }} ({{ $product->sku }})"
+                            data-testid="product-visual-link" class="block rounded-xl hover:ring-2 hover:ring-pine">
+                            <x-product-placeholder :category="$product->category->name" />
+                        </a>
 
                         <div class="flex grow flex-col p-2 pt-4">
                             <p class="text-xs font-semibold text-muted-ink">{{ $product->category->name }} <span aria-hidden="true">·</span> {{ $product->sku }}</p>
                             <h2 class="mt-1 text-lg leading-snug font-semibold">
-                                <a href="{{ route('catalog.show', $product->sku) }}" class="rounded-sm hover:text-pine hover:underline">{{ $product->name }}</a>
+                                <a href="{{ $detailUrl }}" class="rounded-sm hover:text-pine hover:underline">{{ $product->name }}</a>
                             </h2>
                             @if (filled($product->description))
                                 <p class="mt-2 text-sm leading-relaxed text-muted-ink">{{ Str::limit($product->description, 100) }}</p>
