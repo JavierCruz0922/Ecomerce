@@ -164,14 +164,14 @@ Para CI, enlaza la ejecución del mismo SHA probado. Para PostgreSQL, registra e
 
 ### T12/P03 · Livewire, Blade y Tailwind
 
-En una copia temporal sin `.env`, aplica los controles de aislamiento anteriores y usa la clave de prueba versionada en `phpunit.xml`. En Windows, asigna rutas con unidad a `LARAVEL_STORAGE_PATH` y `VIEW_COMPILED_PATH` y conserva los valores de `APP_*_CACHE` sin unidad y con barra inicial.
+En una copia temporal sin `.env`, ejecuta primero el bloque exacto de [SQLite aislado](#ejecutar-phpunit-en-sqlite-aislado). Ese bloque ya configura las rutas temporales para Windows. Mantén la misma terminal para repetir PHPUnit directamente y ejecutar la prueba específica. La clave de prueba se carga desde `phpunit.xml`.
 
 ```powershell
 php vendor/bin/phpunit --do-not-cache-result --filter LivewireDemoTest
 php vendor/bin/phpunit --do-not-cache-result
 ```
 
-La prueba específica debe devolver HTTP 200 y encontrar el componente y el contador en `0`. Dos incrementos cambian el valor a `1` y `2`. El botón de reinicio lo devuelve a `0`. Ambos comandos deben salir con código `0`.
+La prueba específica verifica HTTP 200 en `local` y `testing`, HTTP 404 en `production` y el renderizado inicial en `0`. Dos incrementos cambian el valor a `1` y `2`. La acción de reinicio lo devuelve a `0`. Ambos comandos deben salir con código `0`.
 
 Para la revisión en navegador, genera los recursos con `npm.cmd run build` en la copia temporal y sirve esa copia en `127.0.0.1`. Usa sesiones de archivo dentro de la carpeta temporal, SQLite `:memory:` y la clave de `phpunit.xml` para el proceso del servidor. Abre `/demo/livewire`, confirma que se aplica Tailwind y que los botones se alcanzan con Tab. Incrementa y reinicia el contador con el teclado. La página debe conservarse cargada y cada interacción debe devolver HTTP 200 en el endpoint de actualización de Livewire. Repite a 390 px de ancho y comprueba que los controles sigan visibles.
 

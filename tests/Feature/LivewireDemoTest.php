@@ -17,6 +17,20 @@ class LivewireDemoTest extends TestCase
             ->assertSeeHtml('data-testid="demo-count">0</output>');
     }
 
+    public function test_demo_route_is_available_in_local_environment(): void
+    {
+        $this->app->instance('env', 'local');
+
+        $this->get(route('demo.livewire'))->assertOk();
+    }
+
+    public function test_demo_route_is_hidden_in_production(): void
+    {
+        $this->app->instance('env', 'production');
+
+        $this->get(route('demo.livewire'))->assertNotFound();
+    }
+
     public function test_counter_increments_and_resets_with_livewire_updates(): void
     {
         Livewire::test(DemoCounter::class)

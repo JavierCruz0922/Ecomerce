@@ -6,4 +6,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::view('/demo/livewire', 'livewire-demo')->name('demo.livewire');
+Route::get('/demo/livewire', function () {
+    abort_unless(app()->environment(['local', 'testing']), 404);
+
+    return view('livewire-demo');
+})->name('demo.livewire');
