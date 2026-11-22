@@ -175,6 +175,33 @@ La prueba específica verifica HTTP 200 en `local` y `testing`, HTTP 404 en `pro
 
 Para la revisión en navegador, genera los recursos con `npm.cmd run build` en la copia temporal y sirve esa copia en `127.0.0.1`. Usa sesiones de archivo dentro de la carpeta temporal, SQLite `:memory:` y la clave de `phpunit.xml` para el proceso del servidor. Abre `/demo/livewire`, confirma que se aplica Tailwind y que los botones se alcanzan con Tab. Incrementa y reinicia el contador con el teclado. La página debe conservarse cargada y cada interacción debe devolver HTTP 200 en el endpoint de actualización de Livewire. Repite a 390 px de ancho y comprueba que los controles sigan visibles.
 
+### T05/P09 · Catálogo y navegación
+
+Ejecuta el bloque exacto de [SQLite aislado](#ejecutar-phpunit-en-sqlite-aislado) en una copia temporal sin `.env`. La suite debe terminar con salida 0. Repite PHPUnit directamente en la misma terminal y comprueba los casos de T05 y el total de la suite:
+
+```powershell
+php vendor/bin/phpunit --do-not-cache-result --filter 'StoreNavigationTest|ProductCatalogTest'
+php vendor/bin/phpunit --do-not-cache-result
+```
+
+Los casos de T05 comprueban enlaces y estado activo, detalle por SKU, demo oculta en producción, 20 fichas de prueba con precios COP, búsquedas por nombre y SKU, precio inclusivo, categoría, combinación y limpieza de filtros, datos inválidos, agotados, stock conservado y paginación al superar 20 registros. Las pruebas preparan su propio catálogo mediante `KicfCatalogSeeder`.
+
+Para comprobar la interfaz, usa una copia temporal y una base SQLite nueva dentro de esa copia. Antes de ejecutar `php artisan migrate --force` y `php artisan db:seed --class=KicfCatalogSeeder --force`, verifica que la conexión efectiva apunta al archivo temporal. Para simular un agotado, asigna stock 0 a `PAP020` únicamente en esa base de prueba. Sirve la copia en `127.0.0.1` con sesiones locales, ejecuta `npm.cmd ci` y el build desde la copia, y revisa en Edge:
+
+| Acción | Resultado esperado |
+| --- | --- |
+| Abrir `/`, navegar a `/catalogo` y regresar a Inicio con Tab y Enter | Las rutas devuelven 200, el foco es visible y la opción activa cambia |
+| Abrir el catálogo sin filtros | 20 productos. `PAP020` aparece como agotado en la copia de prueba |
+| Buscar `Cuaderno`, buscar `PAP020` y usar un texto inexistente | Dos, un producto agotado y un estado vacío, respectivamente |
+| Aplicar categoría Papel y rango de 3.500 a 8.000 COP | Cuatro productos. Añadir `Cuaderno` devuelve dos. Limpiar devuelve 20 |
+| Abrir `/catalogo/PAP006` y volver | Detalle con categoría, precio y existencias. El menú conserva el contexto de Catálogo |
+| Hacer clic en la imagen provisional de PAP001 y repetir con Tab y Enter | Ambos accesos abren `/catalogo/PAP001` y muestran Bolígrafo azul. El título conserva su enlace. Volver y filtrar no cambia el stock. |
+| Repetir en escritorio, tableta y móvil de 390 px | Controles accesibles, sin desbordamiento horizontal, sin errores HTTP 5xx o JavaScript |
+
+Los cambios de búsqueda y filtro deben responder por Livewire sin recargar la página. Conserva capturas de Inicio y Catálogo y adjunta los resultados al PR con el SHA probado.
+
+La prueba de navegación sigue los enlaces visuales de los 20 SKU y comprueba el 404 para SKU inexistentes y retirados. El enlace se define en la tarjeta y envuelve el componente de imagen. Cuando se autoricen las imágenes reales, sustituye el contenido visual dentro del mismo enlace y repite los controles de clic, teclado y SKU. Mientras falten las imágenes autorizadas, R04 queda parcialmente cumplido.
+
 ## 3. Matriz de casos de aceptación
 
 | ID | Función | Caso de prueba | Resultado esperado |

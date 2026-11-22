@@ -79,6 +79,10 @@ Antes de implementar funcionalidades, consultar este documento y respetar sus re
 7. No ejecutar migraciones destructivas sin autorización.
 8. No modificar credenciales ni archivos de configuración sensibles sin autorización.
 
+### Navegación progresiva
+
+Al terminar y probar un módulo visible, incorpora su ruta nombrada al componente Blade de navegación principal cuando corresponda. Verifica el acceso desde Inicio, el estado activo, el foco por teclado y la presentación móvil. Muestra las rutas privadas según sus permisos y la demo de Livewire solo en `local` y `testing`. Las funciones futuras se incorporan cuando sean operativas. Agrega las pruebas de navegación aplicables y registra el módulo, su ruta y los resultados en el PR y la evidencia TSP.
+
 ## 4. Documentación automática
 
 Después de cada cambio relevante:

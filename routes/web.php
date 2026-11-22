@@ -1,10 +1,17 @@
 <?php
 
+use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
-});
+    return view('home');
+})->name('home');
+
+Route::view('/catalogo', 'catalog.index')->name('catalog.index');
+
+Route::get('/catalogo/{product:sku}', function (Product $product) {
+    return view('catalog.show', ['product' => $product->loadMissing('category')]);
+})->name('catalog.show');
 
 Route::get('/demo/livewire', function () {
     abort_unless(app()->environment(['local', 'testing']), 404);
