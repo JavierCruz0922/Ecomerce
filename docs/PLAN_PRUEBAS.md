@@ -225,6 +225,8 @@ Ejecuta primero el bloque PowerShell exacto de [SQLite aislado](#ejecutar-phpuni
 
 En Edge, repite el flujo a 1440, 768 y 390 px. En móvil, verifica que al entrar se vean la búsqueda, la coincidencia y las acciones, con los filtros avanzados plegados. Abre y pliega el panel con Tab y Enter. Comprueba el estado anunciado, el foco y que los filtros aplicados sigan vigentes al plegar. En tableta y escritorio, categoría, color, material y precio deben estar visibles. Aplica la búsqueda con Enter, abre el detalle y regresa. Las actualizaciones de Livewire deben responder HTTP 200 y conservar la carga de página. Los buscadores usan `LOWER` de cada motor. SQLite estándar pliega mayúsculas ASCII y PostgreSQL depende de su configuración regional. Las búsquedas conservan los acentos.
 
+A 390 × 844 px, comprueba que la foto y el nombre del primer producto estén visibles al entrar a Catálogo con la página en posición inicial.
+
 ## 3. Matriz de casos de aceptación
 
 | ID | Función | Caso de prueba | Resultado esperado |

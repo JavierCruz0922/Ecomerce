@@ -1,11 +1,11 @@
 <div>
     <form wire:submit="applyFilters" x-data="{ filtersOpen: false }" novalidate aria-label="Filtrar productos"
-        class="rounded-2xl border border-paper-line bg-white p-4 sm:p-6">
+        class="rounded-2xl border border-paper-line bg-white p-3 sm:p-6">
         @php($fieldClass = 'min-h-11 w-full min-w-0 rounded-lg border border-control-line bg-paper px-3 text-sm text-ink placeholder:text-muted-ink')
-        <div class="grid gap-3 sm:grid-cols-[2fr_1fr] sm:gap-4">
+        <div class="grid gap-2 min-[360px]:grid-cols-[minmax(0,1fr)_7rem] sm:grid-cols-[2fr_1fr] sm:gap-4">
             <div class="min-w-0">
                 <label for="catalog-search" class="mb-1.5 block text-sm font-semibold">Nombre o SKU</label>
-                <input id="catalog-search" type="search" wire:model="search" maxlength="100" placeholder="Ej. Cuaderno o PAP006"
+                <input id="catalog-search" type="search" wire:model="search" maxlength="100" placeholder="Cuaderno o PAP006"
                     class="{{ $fieldClass }}" @error('search') aria-invalid="true" aria-describedby="search-error" @enderror>
                 @error('search') <p id="search-error" role="alert" class="mt-1 text-sm text-red-800">{{ $message }}</p> @enderror
             </div>
@@ -18,11 +18,11 @@
                 @error('searchMode') <p id="search-mode-error" role="alert" class="mt-1 text-sm text-red-800">{{ $message }}</p> @enderror
             </div>
         </div>
-        <p id="catalog-search-mode-help" class="mt-2 text-xs text-muted-ink">La búsqueda parcial encuentra fragmentos. La exacta requiere el nombre o SKU completo.</p>
+        <p id="catalog-search-mode-help" class="mt-2 text-xs text-muted-ink">Parcial busca fragmentos. Exacta usa el texto completo.</p>
 
         <button type="button" aria-controls="catalog-advanced-filters" aria-expanded="false"
             x-bind:aria-expanded="filtersOpen" x-on:click="filtersOpen = ! filtersOpen"
-            class="mt-3 inline-flex min-h-11 items-center gap-2 rounded-lg text-sm font-semibold text-pine sm:hidden">
+            class="mt-2 inline-flex min-h-11 items-center gap-2 rounded-lg text-sm font-semibold text-pine sm:hidden">
             Filtros avanzados
             <span aria-hidden="true" x-text="filtersOpen ? '−' : '+'">+</span>
         </button>
@@ -64,13 +64,13 @@
             @endforeach
         </div>
 
-        <div class="mt-4 flex flex-wrap gap-2">
+        <div class="mt-2 flex flex-wrap gap-2 sm:mt-4">
             <button type="submit" class="min-h-11 rounded-lg bg-pine px-5 text-sm font-semibold text-white hover:bg-pine-dark">Aplicar filtros</button>
             <button type="button" wire:click="clearFilters" class="min-h-11 rounded-lg px-4 text-sm font-semibold text-pine hover:bg-paper-shade">Limpiar filtros</button>
         </div>
     </form>
 
-    <p role="status" aria-live="polite" class="my-5 text-sm font-semibold text-muted-ink" data-testid="catalog-result">
+    <p role="status" aria-live="polite" class="my-3 text-sm font-semibold text-muted-ink sm:my-5" data-testid="catalog-result">
         {{ $products->total() }} {{ $products->total() === 1 ? 'producto' : 'productos' }}
     </p>
 
