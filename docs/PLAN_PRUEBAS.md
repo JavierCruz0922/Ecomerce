@@ -138,6 +138,19 @@ npm.cmd run build -- --outDir "$salida" --configLoader runner
 
 Para CI, enlaza la ejecución del mismo SHA probado. Para PostgreSQL, registra el comando y la conexión efectiva de la suite de T13/P15 antes de operaciones con escritura. Una ejecución en SQLite acredita únicamente la regresión de ese motor.
 
+### T12/P03 · Livewire, Blade y Tailwind
+
+En una copia temporal sin `.env`, aplica los controles de aislamiento anteriores y usa la clave de prueba versionada en `phpunit.xml`. En Windows, asigna rutas con unidad a `LARAVEL_STORAGE_PATH` y `VIEW_COMPILED_PATH` y conserva los valores de `APP_*_CACHE` sin unidad y con barra inicial.
+
+```powershell
+php vendor/bin/phpunit --do-not-cache-result --filter LivewireDemoTest
+php vendor/bin/phpunit --do-not-cache-result
+```
+
+La prueba específica debe devolver HTTP 200 y encontrar el componente y el contador en `0`. Dos incrementos cambian el valor a `1` y `2`. El botón de reinicio lo devuelve a `0`. Ambos comandos deben salir con código `0`.
+
+Para la revisión en navegador, genera los recursos con `npm.cmd run build` en la copia temporal y sirve esa copia en `127.0.0.1`. Usa sesiones de archivo dentro de la carpeta temporal, SQLite `:memory:` y la clave de `phpunit.xml` para el proceso del servidor. Abre `/demo/livewire`, confirma que se aplica Tailwind y que los botones se alcanzan con Tab. Incrementa y reinicia el contador con el teclado. La página debe conservarse cargada y cada interacción debe devolver HTTP 200 en el endpoint de actualización de Livewire. Repite a 390 px de ancho y comprueba que los controles sigan visibles.
+
 ## 3. Matriz de casos de aceptación
 
 | ID | Función | Caso de prueba | Resultado esperado |
