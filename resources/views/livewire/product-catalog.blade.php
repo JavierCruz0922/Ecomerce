@@ -1,5 +1,6 @@
 <div>
-    <form wire:submit="applyFilters" aria-label="Filtrar productos" class="rounded-2xl border border-paper-line bg-white p-4 sm:p-6">
+    <form wire:submit="applyFilters" x-data="{ filtersOpen: false }" novalidate aria-label="Filtrar productos"
+        class="rounded-2xl border border-paper-line bg-white p-4 sm:p-6">
         @php($fieldClass = 'min-h-11 w-full min-w-0 rounded-lg border border-control-line bg-paper px-3 text-sm text-ink placeholder:text-muted-ink')
         <div class="grid gap-3 sm:grid-cols-[2fr_1fr] sm:gap-4">
             <div class="min-w-0">
@@ -11,16 +12,27 @@
             <div class="min-w-0">
                 <label for="catalog-search-mode" class="mb-1.5 block text-sm font-semibold">Coincidencia</label>
                 <select id="catalog-search-mode" wire:model="searchMode" class="{{ $fieldClass }}" aria-describedby="catalog-search-mode-help @error('searchMode') search-mode-error @enderror" @error('searchMode') aria-invalid="true" @enderror>
-                    <option value="partial">Parcial · contiene el texto</option>
-                    <option value="exact">Exacta · nombre o SKU completo</option>
+                    <option value="partial">Parcial</option>
+                    <option value="exact">Exacta</option>
                 </select>
                 @error('searchMode') <p id="search-mode-error" role="alert" class="mt-1 text-sm text-red-800">{{ $message }}</p> @enderror
             </div>
         </div>
         <p id="catalog-search-mode-help" class="mt-2 text-xs text-muted-ink">La búsqueda parcial encuentra fragmentos. La exacta requiere el nombre o SKU completo.</p>
 
-        <div class="mt-4 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-5">
-            <div class="col-span-2 min-w-0 sm:col-span-1">
+        <button type="button" aria-controls="catalog-advanced-filters" aria-expanded="false"
+            x-bind:aria-expanded="filtersOpen" x-on:click="filtersOpen = ! filtersOpen"
+            class="mt-3 inline-flex min-h-11 items-center gap-2 rounded-lg text-sm font-semibold text-pine sm:hidden">
+            Filtros avanzados
+            <span aria-hidden="true" x-text="filtersOpen ? '−' : '+'">+</span>
+        </button>
+        @if ($errors->hasAny(['category', 'color', 'material', 'minPrice', 'maxPrice']))
+            <p role="alert" class="mt-1 text-sm text-red-800 sm:hidden">Revisa los campos de filtros avanzados.</p>
+        @endif
+
+        <div id="catalog-advanced-filters" data-expanded="false" x-bind:data-expanded="filtersOpen ? 'true' : 'false'"
+            class="mt-4 grid gap-3 max-sm:data-[expanded=false]:hidden min-[360px]:grid-cols-2 sm:gap-4 lg:grid-cols-5">
+            <div class="min-w-0 min-[360px]:max-sm:col-span-2">
                 <label for="catalog-category" class="mb-1.5 block text-sm font-semibold">Categoría</label>
                 <select id="catalog-category" wire:model="category" class="{{ $fieldClass }}" @error('category') aria-invalid="true" aria-describedby="category-error" @enderror>
                     <option value="">Todas las categorías</option>
@@ -30,11 +42,11 @@
                 </select>
                 @error('category') <p id="category-error" role="alert" class="mt-1 text-sm text-red-800">{{ $message }}</p> @enderror
             </div>
-            @foreach (['color' => ['Color', 'Todos los colores', $colors], 'material' => ['Material', 'Todos los materiales', $materials]] as $field => [$label, $placeholder, $options])
+            @foreach (['color' => $colors, 'material' => $materials] as $field => $options)
                 <div class="min-w-0">
-                    <label for="catalog-{{ $field }}" class="mb-1.5 block text-sm font-semibold">{{ $label }}</label>
+                    <label for="catalog-{{ $field }}" class="mb-1.5 block text-sm font-semibold">{{ ucfirst($field) }}</label>
                     <select id="catalog-{{ $field }}" wire:model="{{ $field }}" class="{{ $fieldClass }}" @error($field) aria-invalid="true" aria-describedby="{{ $field }}-error" @enderror>
-                        <option value="">{{ $placeholder }}</option>
+                        <option value="">Cualquiera</option>
                         @foreach ($options as $option)
                             <option value="{{ $option }}">{{ $option }}</option>
                         @endforeach
@@ -42,7 +54,7 @@
                     @error($field) <p id="{{ $field }}-error" role="alert" class="mt-1 text-sm text-red-800">{{ $message }}</p> @enderror
                 </div>
             @endforeach
-            @foreach (['minPrice' => 'Precio mínimo (COP)', 'maxPrice' => 'Precio máximo (COP)'] as $field => $label)
+            @foreach (['minPrice' => 'Desde (COP)', 'maxPrice' => 'Hasta (COP)'] as $field => $label)
                 <div>
                     <label for="{{ $field }}" class="mb-1.5 block text-sm font-semibold">{{ $label }}</label>
                     <input id="{{ $field }}" type="number" inputmode="numeric" min="0" max="2147483647" step="1"
