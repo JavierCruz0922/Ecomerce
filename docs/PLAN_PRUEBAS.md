@@ -40,6 +40,7 @@ $proof = Join-Path ([IO.Path]::GetTempPath()) ('ecomerce-pr-tests-' + [guid]::Ne
 if ((Split-Path -Qualifier $proof) -ne (Split-Path -Qualifier (Get-Location).Path)) { throw 'Temporary directory must be on the current drive' }
 $null = New-Item -ItemType Directory -Path $proof
 $absolute = ($proof.Substring(2)).Replace('\','/')
+$storage = $proof.Replace('\','/')
 $env:APP_ENV = 'testing'
 $env:APP_MAINTENANCE_DRIVER = 'file'
 $env:APP_CONFIG_CACHE = "$absolute/config.php"
@@ -47,8 +48,8 @@ $env:APP_ROUTES_CACHE = "$absolute/routes.php"
 $env:APP_EVENTS_CACHE = "$absolute/events.php"
 $env:APP_PACKAGES_CACHE = "$absolute/packages.php"
 $env:APP_SERVICES_CACHE = "$absolute/services.php"
-$env:LARAVEL_STORAGE_PATH = "$absolute/storage"
-$env:VIEW_COMPILED_PATH = "$absolute/storage/framework/views"
+$env:LARAVEL_STORAGE_PATH = "$storage/storage"
+$env:VIEW_COMPILED_PATH = "$storage/storage/framework/views"
 $env:LOG_CHANNEL = 'stderr'
 $env:DB_CONNECTION = 'sqlite'
 $env:DB_DATABASE = ':memory:'
@@ -117,6 +118,29 @@ if ($codigoUsuario -ne 0) { throw "CustomUserTest failed (exit=$codigoUsuario)" 
 ```
 
 **Resultado esperado.** El correo aún no existe al iniciar. Se crea exactamente un usuario con el nombre y correo indicados. La contraseña queda almacenada como hash y fuera de la serialización del usuario. El proveedor de Laravel acepta la credencial correcta y rechaza una incorrecta. El caso pasa con código de salida 0. La prueba cubre persistencia y validación de credenciales; las rutas de registro, inicio y cierre de sesión se verifican en T04/P08.
+
+## Carga inicial del catálogo KICF
+
+T03/P07 usa [KicfCatalogSeeder](../database/seeders/KicfCatalogSeeder.php) y un [manifiesto de datos](../database/data/kicf-catalog.json) generado desde la hoja Productos. El Excel original y los archivos de imagen se conservan en la fuente local. Las rutas almacenan el nombre del archivo original, relativo a la carpeta de imágenes del catálogo.
+
+Desde la raíz, con acceso a la fuente local, comprueba que el manifiesto versionado sigue siendo reproducible:
+
+```powershell
+$excel = 'docs/Catalogo_Papeleria_KICF/Catalogo_20_Productos_Papeleria_KICF.xlsx'
+python scripts/export_kicf_catalog.py --check $excel database/data/kicf-catalog.json
+```
+
+El resultado esperado es código 0 y 20 SKU, de `PAP001` a `PAP020`. Para regenerar el JSON a partir del Excel verificado, ejecuta el mismo comando sin `--check` y revisa el diff. La regeneración escribe solo el JSON.
+
+Después de verificar SQLite en memoria, ejecuta:
+
+```powershell
+php vendor/bin/phpunit --do-not-cache-result --filter KicfCatalogSeederTest
+```
+
+La [prueba](../tests/Feature/KicfCatalogSeederTest.php) prepara el esquema y ejecuta `db:seed --class=KicfCatalogSeeder` en el mismo proceso. Espera 20 productos nuevos y cuatro categorías en la primera carga. En la segunda, espera cero inserciones y 20 existentes, incluidas las filas retiradas. Los precios, existencias y demás datos editados se conservan. Un lote con filas inválidas se rechaza completo y mantiene la base sin cambios.
+
+El manifiesto permite probar la carga en un clon sin el Excel ni las imágenes. La comprobación de que los archivos físicos coinciden con las referencias se realiza sobre la fuente local. La distribución de imágenes depende de sus permisos.
 
 ## Ejecutar estilo, Composer y build
 
